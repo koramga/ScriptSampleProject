@@ -18,6 +18,8 @@ public class ScriptDesignerEditor : ModuleRules
 		PrivateIncludePaths.AddRange(
 			new string[] {
 				// ... add other private include paths required here ...
+				"GenericGraphEditor/Private",
+				"GenericGraphEditor/Public",
 			}
 			);
 			
@@ -27,6 +29,9 @@ public class ScriptDesignerEditor : ModuleRules
 			{
 				"Core",
 				// ... add other public dependencies that you statically link with here ...
+				"CoreUObject",
+				"Engine",
+				"UnrealEd",
 			}
 			);
 			
@@ -34,10 +39,18 @@ public class ScriptDesignerEditor : ModuleRules
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"CoreUObject",
-				"Engine",
+				"ScriptDesignerRuntime",
+				"AssetTools",
 				"Slate",
+				"InputCore",
 				"SlateCore",
+				"GraphEditor",
+				"PropertyEditor",
+				"EditorStyle",
+				"Kismet",
+				"KismetWidgets",
+				"ApplicationCore",
+				"ToolMenus",
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);
