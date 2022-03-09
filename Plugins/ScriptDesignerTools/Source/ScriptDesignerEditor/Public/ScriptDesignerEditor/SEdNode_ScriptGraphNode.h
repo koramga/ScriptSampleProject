@@ -14,7 +14,7 @@ public :
 	SLATE_BEGIN_ARGS(SEdNode_ScriptGraphNode) {}
 	SLATE_END_ARGS()
 
-	void Construct(const FArguments& InArgs, class UEdNode_GenericGraphNode* InNode);
+	void Construct(const FArguments& InArgs, class UEdNode_ScriptGraphNode* InNode);
 
 	virtual void UpdateGraphNode() override;
 	virtual void CreatePinWidgets() override;

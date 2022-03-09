@@ -17,6 +17,7 @@ public class ScriptDesignerRuntime : ModuleRules
 		
 		PrivateIncludePaths.AddRange(
 			new string[] {
+				"GenericGraphRuntime/Private",
 				// ... add other private include paths required here ...
 			}
 			);
@@ -26,6 +27,8 @@ public class ScriptDesignerRuntime : ModuleRules
 			new string[]
 			{
 				"Core",
+				"CoreUObject",
+				"Engine",
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);
@@ -34,10 +37,9 @@ public class ScriptDesignerRuntime : ModuleRules
 		PrivateDependencyModuleNames.AddRange(
 			new string[]
 			{
-				"CoreUObject",
-				"Engine",
 				"Slate",
 				"SlateCore",
+				"GameplayTags"
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

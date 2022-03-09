@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Copyright Epic Games, Inc. All Rights Reserved.
 
 #pragma once
 
@@ -9,19 +9,16 @@
 #include "SGraphPin.h"
 #include "GraphEditorDragDropAction.h"
 
-/**
- * 
- */
 class SGraphPanel;
 class UEdGraph;
 
-class FScriptGraphDragConnection : public FGraphEditorDragDropAction
+class FGenericGraphDragConnection : public FGraphEditorDragDropAction
 {
 public:
 	DRAG_DROP_OPERATOR_TYPE(FDragConnection, FGraphEditorDragDropAction)
 
 		typedef TArray<FGraphPinHandle> FDraggedPinTable;
-	static TSharedRef<FScriptGraphDragConnection> New(const TSharedRef<SGraphPanel>& InGraphPanel, const FDraggedPinTable& InStartingPins);
+	static TSharedRef<FGenericGraphDragConnection> New(const TSharedRef<SGraphPanel>& InGraphPanel, const FDraggedPinTable& InStartingPins);
 
 	// FDragDropOperation interface
 	virtual void OnDrop(bool bDropWasHandled, const FPointerEvent& MouseEvent) override;
@@ -44,7 +41,7 @@ protected:
 	typedef FGraphEditorDragDropAction Super;
 
 	// Constructor: Make sure to call Construct() after factorying one of these
-	FScriptGraphDragConnection(const TSharedRef<SGraphPanel>& GraphPanel, const FDraggedPinTable& DraggedPins);
+	FGenericGraphDragConnection(const TSharedRef<SGraphPanel>& GraphPanel, const FDraggedPinTable& DraggedPins);
 
 protected:
 	TSharedPtr<SGraphPanel> GraphPanel;
@@ -52,5 +49,4 @@ protected:
 
 	/** Offset information for the decorator widget */
 	FVector2D DecoratorAdjust;
-	
 };

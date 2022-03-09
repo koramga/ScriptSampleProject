@@ -8,7 +8,7 @@
  * 
 */
 
-namespace GenericGraphColors
+namespace ScriptGraphColor
 {
 	namespace NodeBody
 	{
