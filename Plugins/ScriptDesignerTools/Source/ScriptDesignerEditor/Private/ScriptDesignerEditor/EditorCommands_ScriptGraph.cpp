@@ -3,10 +3,12 @@
 
 #include "ScriptDesignerEditor/EditorCommands_ScriptGraph.h"
 
-EditorCommands_ScriptGraph::EditorCommands_ScriptGraph()
+#define LOCTEXT_NAMESPACE "EditorCommands_ScriptGraph"
+
+void FEditorCommands_ScriptGraph::RegisterCommands()
 {
+	UI_COMMAND(GraphSettings, "Graph Settings", "Graph Settings", EUserInterfaceActionType::Button, FInputChord());
+	UI_COMMAND(AutoArrange, "Auto Arrange", "Auto Arrange", EUserInterfaceActionType::Button, FInputChord());
 }
 
-EditorCommands_ScriptGraph::~EditorCommands_ScriptGraph()
-{
-}
+#undef LOCTEXT_NAMESPACE

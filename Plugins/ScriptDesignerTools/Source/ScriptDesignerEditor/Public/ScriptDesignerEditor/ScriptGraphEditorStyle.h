@@ -3,13 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Styling/SlateStyle.h"
 
 /**
  * 
  */
-class SCRIPTDESIGNEREDITOR_API ScriptGraphEditorStyle
+class SCRIPTDESIGNEREDITOR_API FScriptGraphEditorStyle
 {
-public:
-	ScriptGraphEditorStyle();
-	~ScriptGraphEditorStyle();
+public :
+	static void Initialize();
+	static void Shutdown();
+
+	static const FName& GetStyleSetName();
+
+private :
+	static TSharedPtr<FSlateStyleSet> StyleSet;
 };

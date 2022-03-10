@@ -7,9 +7,17 @@
 /**
  * 
  */
-class SCRIPTDESIGNEREDITOR_API EditorCommands_ScriptGraph
+class SCRIPTDESIGNEREDITOR_API FEditorCommands_ScriptGraph : public TCommands<FEditorCommands_ScriptGraph>
 {
-public:
-	EditorCommands_ScriptGraph();
-	~EditorCommands_ScriptGraph();
+public :
+	FEditorCommands_ScriptGraph()
+		: TCommands<FEditorCommands_ScriptGraph>("ScriptGraphEditor", NSLOCTEXT("Contxts", "ScriptGraphEditor", "Script Graph Editor"), NAME_None, FEditorStyle::GetStyleSetName())
+	{
+
+	}
+
+	TSharedPtr<FUICommandInfo> GraphSettings;
+	TSharedPtr<FUICommandInfo> AutoArrange;
+
+	virtual void RegisterCommands() override;
 };
