@@ -43,8 +43,21 @@ protected:
 	TMap<UScriptGraphNode*, UScriptGraphEdge*> Edges;
 
 public :
-	const TArray<UScriptGraphNode*>& GetChildrenNodes() const;
+	TArray<UScriptGraphNode*>& GetChildrenNodes();
+	TArray<UScriptGraphNode*>& GetParentNodes();
 	void Clear();
+
+	void AddChildNode(UScriptGraphNode* ChildNode);
+	void RemoveChildNode(UScriptGraphNode* ChildNode);
+	void ClearChildNodes();
+	bool IsEmptyChildNode() const;
+	void AddParentNode(UScriptGraphNode* ParentNode);
+	void RemoveParentNode(UScriptGraphNode* ParentNode);
+	void ClearParentNodes();
+	bool IsEmptyParentNode() const;
+	void AddEdge(UScriptGraphNode* InNode, UScriptGraphEdge* InEdge);
+	void SetGraph(UScriptGraph* InGraph);
+	void ClearEdges();
 	
 public :
 	UFUNCTION(BlueprintCallable, Category="ScriptGraphNode")

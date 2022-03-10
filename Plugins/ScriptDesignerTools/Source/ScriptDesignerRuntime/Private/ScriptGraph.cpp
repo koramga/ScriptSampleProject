@@ -48,6 +48,26 @@ void UScriptGraph::SetEdgeEnabled(bool InbIsEdgeEnabled)
 	bIsEdgeEnabled = InbIsEdgeEnabled;
 }
 
+const TArray<UScriptGraphNode*>& UScriptGraph::GetAllNodes() const
+{
+	return AllNodes;
+}
+
+void UScriptGraph::AddNode(UScriptGraphNode* ScriptGraphNode)
+{
+	AllNodes.Add(ScriptGraphNode);
+}
+
+void UScriptGraph::AddRootNode(UScriptGraphNode* InNode)
+{
+	RootNodes.Add(InNode);
+}
+
+TArray<UScriptGraphNode*>& UScriptGraph::GetRootNodes()
+{
+	return RootNodes;
+}
+
 void UScriptGraph::Print(bool ToConsole, bool ToScreen)
 {
 	int32 Level = 0;

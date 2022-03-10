@@ -14,9 +14,14 @@ UScriptGraphNode::~UScriptGraphNode()
 {
 }
 
-const TArray<UScriptGraphNode*>& UScriptGraphNode::GetChildrenNodes() const
+TArray<UScriptGraphNode*>& UScriptGraphNode::GetChildrenNodes()
 {
 	return ChildrenNodes;
+}
+
+TArray<UScriptGraphNode*>& UScriptGraphNode::GetParentNodes()
+{
+	return ParentNodes;
 }
 
 void UScriptGraphNode::Clear()
@@ -24,6 +29,71 @@ void UScriptGraphNode::Clear()
 	ParentNodes.Empty();
 	ChildrenNodes.Empty();
 	Edges.Empty();
+}
+
+void UScriptGraphNode::AddChildNode(UScriptGraphNode* ChildNode)
+{
+	ChildrenNodes.Add(ChildNode);
+}
+
+void UScriptGraphNode::RemoveChildNode(UScriptGraphNode* ChildNode)
+{
+	ChildrenNodes.Remove(ChildNode);
+}
+
+void UScriptGraphNode::ClearChildNodes()
+{
+	ChildrenNodes.Reset();
+}
+
+bool UScriptGraphNode::IsEmptyChildNode() const
+{
+	if (ParentNodes.Num() == 0)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+void UScriptGraphNode::AddParentNode(UScriptGraphNode* ParentNode)
+{
+	ParentNodes.Add(ParentNode);
+}
+
+void UScriptGraphNode::RemoveParentNode(UScriptGraphNode* ParentNode)
+{
+	ParentNodes.Remove(ParentNode);
+}
+
+void UScriptGraphNode::ClearParentNodes()
+{
+	ParentNodes.Reset();
+}
+
+bool UScriptGraphNode::IsEmptyParentNode() const
+{
+	if (ParentNodes.Num() == 0)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+void UScriptGraphNode::AddEdge(UScriptGraphNode* InNode, UScriptGraphEdge* InEdge)
+{
+	Edges.Add(InNode, InEdge);
+}
+
+void UScriptGraphNode::SetGraph(UScriptGraph* InGraph)
+{
+	Graph = InGraph;
+}
+
+void UScriptGraphNode::ClearEdges()
+{
+	Edges.Reset();
 }
 
 UScriptGraphEdge* UScriptGraphNode::GetEdge(UScriptGraphNode* ChildNode)

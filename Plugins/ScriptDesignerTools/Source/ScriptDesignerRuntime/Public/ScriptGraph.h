@@ -49,6 +49,11 @@ public :
 
 	bool IsEdgeEnabled() const;
 	void SetEdgeEnabled(bool InbIsEdgeEnabled);
+
+	const TArray<UScriptGraphNode*>& GetAllNodes() const;
+	void AddNode(UScriptGraphNode* ScriptGraphNode);
+	void AddRootNode(UScriptGraphNode* InNode);
+	TArray<UScriptGraphNode*>& GetRootNodes();
 	
 public :
 	UFUNCTION(BlueprintCallable, Category="ScriptGraph")
