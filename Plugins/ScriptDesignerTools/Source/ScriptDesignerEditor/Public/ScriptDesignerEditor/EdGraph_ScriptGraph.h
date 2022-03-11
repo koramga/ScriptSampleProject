@@ -39,6 +39,10 @@ protected:
 	UPROPERTY(Transient)
 	TMap<UScriptGraphEdge*, UEdNode_ScriptGraphEdge*> EdgeMap;
 
+public :
+	UEdNode_ScriptGraphNode* FindNode(UScriptGraphNode* Key);
+	UEdNode_ScriptGraphEdge* FindEdge(UScriptGraphEdge* Key);	
+
 protected:
 	void Clear();
 	void SortNodes(UScriptGraphNode* RootNode);

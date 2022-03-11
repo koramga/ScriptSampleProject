@@ -140,6 +140,16 @@ void UEdGraph_ScriptGraph::PostEditUndo()
 	NotifyGraphChanged();
 }
 
+UEdNode_ScriptGraphNode* UEdGraph_ScriptGraph::FindNode(UScriptGraphNode* Key)
+{
+	return NodeMap[Key];
+}
+
+UEdNode_ScriptGraphEdge* UEdGraph_ScriptGraph::FindEdge(UScriptGraphEdge* Key)
+{
+	return EdgeMap[Key];
+}
+
 void UEdGraph_ScriptGraph::Clear()
 {
 	UScriptGraph* Graph = GetScriptGraph();

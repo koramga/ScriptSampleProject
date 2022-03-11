@@ -14,4 +14,17 @@ class SCRIPTDESIGNEREDITOR_API UForceDirectedLayoutStrategy : public UAutoLayout
 {
 	GENERATED_BODY()
 	
+public :
+	UForceDirectedLayoutStrategy();
+	virtual ~UForceDirectedLayoutStrategy();
+
+	virtual void Layout(UEdGraph* InEdGraph) override;
+
+protected :
+	virtual FBox2D LayoutOnTree(UScriptGraphNode* RootNode, const FBox2D& PreTreeBound);
+
+protected :
+	bool bRandomInit;
+	float InitTemperature;
+	float CoolDownRate;
 };
