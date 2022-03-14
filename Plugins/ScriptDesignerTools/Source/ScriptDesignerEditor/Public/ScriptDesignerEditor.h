@@ -19,6 +19,6 @@ private :
 
 private :
 	TArray<TSharedPtr<IAssetTypeActions>> CreatedAssetTypeActions;
-	EAssetTypeCategories::Type GenericGraphAssetCategoryBit;
-	TSharedPtr<FGraphPanelNodeFactory> GraphPAnelNodeFactory_GenericGraph;
+	EAssetTypeCategories::Type ScriptGraphAssetCategoryBit;
+	TSharedPtr<FGraphPanelNodeFactory> GraphPanelNodeFactory_ScriptGraph;
 };

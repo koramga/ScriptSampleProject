@@ -107,6 +107,8 @@ public :
 	virtual bool IsNameEditable() const;
 	virtual FLinearColor GetBackgroundColor() const;
 	virtual FText GetNodeTitle() const;
+	virtual FText GetContextMenuName() const;
+	const TSubclassOf<UScriptGraphNode>& GetCompatibleGraphType() const;
 	virtual void SetNodeTitle(const FText& NewTitle);
 	virtual bool CanCreateConnection(UScriptGraphNode* Other, FText& ErrorMessage);
 	virtual bool CanCreateConnectionTo(UScriptGraphNode* Other, int32 NumberOfChildrenNodes, FText& ErrorMessage);

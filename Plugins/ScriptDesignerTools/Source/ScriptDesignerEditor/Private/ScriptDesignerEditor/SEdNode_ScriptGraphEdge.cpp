@@ -69,7 +69,7 @@ void SEdNode_ScriptGraphEdge::UpdateGraphNode()
 			+ SOverlay::Slot()
 			[
 				SNew(SImage)
-				.Image(FEditorStyle::GetBrush("Graph.TrasitionNode.ColorSpill"))
+				.Image(FEditorStyle::GetBrush("Graph.TransitionNode.ColorSpill"))
 				.ColorAndOpacity(this, &SEdNode_ScriptGraphEdge::GetEdgeColor)
 			]
 			+ SOverlay::Slot()
@@ -116,31 +116,36 @@ void SEdNode_ScriptGraphEdge::PositionBetweenTwoNodesWithOffset(const FGeometry&
 	const FVector2D StartAnchorPoint = FGeometryHelper::FindClosestPointOnGeom(StartGeom, SeedPoint);
 	const FVector2D EndAnchorPoint = FGeometryHelper::FindClosestPointOnGeom(EndGeom, SeedPoint);
 
-	//Position ourselves halfway along the connecting line between the nodes, elevated away perpendicular to the direction of the line.
-	const float Height = 30.f;
+	// Position ourselves halfway along the connecting line between the nodes, elevated away perpendicular to the direction of the line
+	const float Height = 30.0f;
 
 	const FVector2D DesiredNodeSize = GetDesiredSize();
 
 	FVector2D DeltaPos(EndAnchorPoint - StartAnchorPoint);
 
-	if(DeltaPos.IsNearlyZero())
+	if (DeltaPos.IsNearlyZero())
 	{
-		DeltaPos = FVector2D(10.f, 0.f);	
+		DeltaPos = FVector2D(10.0f, 0.0f);
 	}
 
 	const FVector2D Normal = FVector2D(DeltaPos.Y, -DeltaPos.X).GetSafeNormal();
+
 	const FVector2D NewCenter = StartAnchorPoint + (0.5f * DeltaPos) + (Height * Normal);
 
 	FVector2D DeltaNormal = DeltaPos.GetSafeNormal();
+	
+	// Calculate node offset in the case of multiple transitions between the same two nodes
+	// MultiNodeOffset: the offset where 0 is the centre of the transition, -1 is 1 <size of node>
+	// towards the PrevStateNode and +1 is 1 <size of node> towards the NextStateNode.
 
-	const float MultiNodeSpace = 0.2f;
-	const float MultiNodeStep = 1.f + MultiNodeSpace;
+	const float MutliNodeSpace = 0.2f; // Space between multiple transition nodes (in units of <size of node> )
+	const float MultiNodeStep = (1.f + MutliNodeSpace); //Step between node centres (Size of node + size of node spacer)
 
 	const float MultiNodeStart = -((MaxNodes - 1) * MultiNodeStep) / 2.f;
 	const float MultiNodeOffset = MultiNodeStart + (NodeIndex * MultiNodeStep);
 
-	//Now we need to adjust the new center by the node size, zoom factor and multi node offset
-	const FVector2D NewCorner = NewCenter - (0.5f * DesiredNodeSize) + (DeltaNormal * MultiNodeOffset + DesiredNodeSize.Size());
+	// Now we need to adjust the new center by the node size, zoom factor and multi node offset
+	const FVector2D NewCorner = NewCenter - (0.5f * DesiredNodeSize) + (DeltaNormal * MultiNodeOffset * DesiredNodeSize.Size());
 
 	GraphNode->NodePosX = NewCorner.X;
 	GraphNode->NodePosY = NewCorner.Y;

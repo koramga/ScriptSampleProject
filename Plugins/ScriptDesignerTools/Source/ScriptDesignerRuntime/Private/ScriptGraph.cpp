@@ -38,6 +38,36 @@ void UScriptGraph::SetName(const FString& InName)
 	Name = InName;
 }
 
+bool UScriptGraph::IsValidNodeTypeClass() const
+{
+	if(IsValid(NodeType))
+	{
+		return true;
+	}
+
+	return false;
+}
+
+TSubclassOf<UScriptGraphNode>& UScriptGraph::GetNodeTypeClass()
+{
+	return NodeType;
+}
+
+bool UScriptGraph::IsValidEdgeTypeClass() const
+{
+	if(IsValid(EdgeType))
+	{
+		return true;
+	}
+
+	return false;
+}
+
+TSubclassOf<UScriptGraphEdge>& UScriptGraph::GetEdgeTypeClass()
+{
+	return EdgeType;
+}
+
 bool UScriptGraph::IsEdgeEnabled() const
 {
 	return bIsEdgeEnabled;

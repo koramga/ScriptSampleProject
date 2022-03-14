@@ -47,6 +47,13 @@ public :
 	FString GetName() const;
 	void SetName(const FString& InName);
 
+	bool IsValidNodeTypeClass() const;
+	TSubclassOf<UScriptGraphNode>& GetNodeTypeClass();
+
+	bool IsValidEdgeTypeClass() const;
+	TSubclassOf<UScriptGraphEdge>& GetEdgeTypeClass();
+	
+
 	bool IsEdgeEnabled() const;
 	void SetEdgeEnabled(bool InbIsEdgeEnabled);
 

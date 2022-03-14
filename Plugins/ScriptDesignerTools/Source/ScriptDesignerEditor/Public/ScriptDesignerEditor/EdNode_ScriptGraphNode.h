@@ -36,6 +36,8 @@ public:
 
 	void SetEdNode(SEdNode_ScriptGraphNode* InNode);
 	SEdNode_ScriptGraphNode* GetEdNode() const;
+
+	void NewScriptGraphNode(UObject* Outer, const UClass* Class);
 	
 	UEdGraph_ScriptGraph* GetScriptGraphEdGraph() const;
 

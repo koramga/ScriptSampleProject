@@ -132,6 +132,16 @@ FText UScriptGraphNode::GetNodeTitle() const
 	return NodeTitle.IsEmpty() ? GetDescription() : NodeTitle;
 }
 
+FText UScriptGraphNode::GetContextMenuName() const
+{
+	return ContextMenuName;
+}
+
+const TSubclassOf<UScriptGraphNode>& UScriptGraphNode::GetCompatibleGraphType() const
+{
+	return CompatibleGraphType;
+}
+
 void UScriptGraphNode::SetNodeTitle(const FText& NewTitle)
 {
 	NodeTitle = NewTitle;

@@ -34,6 +34,12 @@ SEdNode_ScriptGraphNode* UEdNode_ScriptGraphNode::GetEdNode() const
 	return SEdNode;
 }
 
+void UEdNode_ScriptGraphNode::NewScriptGraphNode(UObject* Outer, const UClass* Class)
+{
+	if(false == IsValid(ScriptGraphNode))
+		ScriptGraphNode = NewObject<UScriptGraphNode>(Outer, Class);
+}
+
 void UEdNode_ScriptGraphNode::AllocateDefaultPins()
 {
 	CreatePin(EGPD_Input, "MultipleNodes", FName(), TEXT("In"));

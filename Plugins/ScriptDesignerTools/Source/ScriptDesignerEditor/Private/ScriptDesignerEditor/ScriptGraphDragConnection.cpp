@@ -312,6 +312,9 @@ void FScriptGraphDragConnection::ValidateGraphPinList(TArray<UEdGraphPin*>& OutV
 
 FScriptGraphDragConnection::FScriptGraphDragConnection(const TSharedRef<SGraphPanel>& GraphPanelIn,
                                                        const FDraggedPinTable& DraggedPinsIn)
+	: GraphPanel(GraphPanelIn)
+	, DraggingPins(DraggedPinsIn)
+	, DecoratorAdjust(FSlateApplication::Get().GetCursorSize())
 {
 	if (DraggingPins.Num() > 0)
 	{
