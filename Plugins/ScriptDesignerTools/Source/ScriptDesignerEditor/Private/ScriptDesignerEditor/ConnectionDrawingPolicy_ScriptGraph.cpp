@@ -1,6 +1,6 @@
 #include "ScriptDesignerEditor/ConnectionDrawingPolicy_ScriptGraph.h"
-#include "ScriptDesignerEditor/EdNode_ScriptGraphNode.h"
-#include "ScriptDesignerEditor/EdNode_ScriptGraphEdge.h"
+#include "ScriptDesignerEditor/Node/EdNode_ScriptGraphNode.h"
+#include "ScriptDesignerEditor/Edge/EdNode_ScriptGraphEdge.h"
 
 FConnectionDrawingPolicy_ScriptGraph::FConnectionDrawingPolicy_ScriptGraph(int32 InBackLayerID,
 	int32 InFrontLayerID, float ZoomFactor, const FSlateRect& InClippingRect, FSlateWindowElementList& InDrawElements,

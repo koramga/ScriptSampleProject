@@ -14,8 +14,8 @@
 #include "ScriptDesignerEditor/AssetGraphSchema_ScriptGraph.h"
 #include "ScriptDesignerEditor/EdGraph_ScriptGraph.h"
 #include "ScriptDesignerEditor/EditorCommands_ScriptGraph.h"
-#include "ScriptDesignerEditor/EdNode_ScriptGraphEdge.h"
-#include "ScriptDesignerEditor/EdNode_ScriptGraphNode.h"
+#include "ScriptDesignerEditor/Edge/EdNode_ScriptGraphEdge.h"
+#include "ScriptDesignerEditor/Node/EdNode_ScriptGraphNode.h"
 
 
 #define LOCTEXT_NAMESPACE "AssetEditor_ScriptGraph"

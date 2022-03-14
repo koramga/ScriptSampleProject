@@ -1,6 +1,6 @@
 #include "ScriptDesignerEditor/EdGraph_ScriptGraph.h"
-#include "ScriptDesignerEditor/EdNode_ScriptGraphNode.h"
-#include "ScriptDesignerEditor/EdNode_ScriptGraphEdge.h"
+#include "ScriptDesignerEditor/Node/EdNode_ScriptGraphNode.h"
+#include "ScriptDesignerEditor/Edge/EdNode_ScriptGraphEdge.h"
 #include "ScriptGraphEditorPCH.h"
 
 UEdGraph_ScriptGraph::UEdGraph_ScriptGraph()

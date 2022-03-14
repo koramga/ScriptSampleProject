@@ -3,10 +3,10 @@
 
 #include "ScriptGraphNodeFactory.h"
 #include <EdGraph/EdGraphNode.h>
-#include "ScriptDesignerEditor/SEdNode_ScriptGraphEdge.h"
-#include "ScriptDesignerEditor/EdNode_ScriptGraphEdge.h"
-#include "ScriptDesignerEditor/SEdNode_ScriptGraphNode.h"
-#include "ScriptDesignerEditor/EdNode_ScriptGraphNode.h"
+#include "ScriptDesignerEditor/Edge/SEdNode_ScriptGraphEdge.h"
+#include "ScriptDesignerEditor/Edge/EdNode_ScriptGraphEdge.h"
+#include "ScriptDesignerEditor/Node/SEdNode_ScriptGraphNode.h"
+#include "ScriptDesignerEditor/Node/EdNode_ScriptGraphNode.h"
 
 TSharedPtr<class SGraphNode> FGraphPanelNodeFactory_ScriptGraph::CreateNode(UEdGraphNode* Node) const
 {

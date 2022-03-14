@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "ScriptDesignerEditor/EdNode_ScriptGraphNode.h"
+#include "ScriptDesignerEditor/Node/EdNode_ScriptGraphNode.h"
 
 #define LOCTEXT_NAMESPACE "EdNode_ScriptGraph"
 

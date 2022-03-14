@@ -6,8 +6,8 @@
 #include "UObject/NoExportTypes.h"
 #include "EdGraph/EdGraph.h"
 #include "ScriptDesignerEditor/EdGraph_ScriptGraph.h"
-#include "ScriptDesignerEditor/EdNode_ScriptGraphNode.h"
-#include "ScriptDesignerEditor/EdNode_ScriptGraphEdge.h"
+#include "ScriptDesignerEditor/Node/EdNode_ScriptGraphNode.h"
+#include "ScriptDesignerEditor/Edge/EdNode_ScriptGraphEdge.h"
 #include "ScriptDesignerEditor/Settings_ScriptGraphEditor.h"
 #include "AutoLayoutStrategy.generated.h"
 

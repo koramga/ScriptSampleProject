@@ -8,8 +8,8 @@
 #include "EdGraph/EdGraph.h"
 #include "SGraphPanel.h"
 #include "ScopedTransaction.h"
-#include "ScriptDesignerEditor/EdNode_ScriptGraphNode.h"
-#include "ScriptDesignerEditor/EdNode_ScriptGraphEdge.h"
+#include "ScriptDesignerEditor/Node/EdNode_ScriptGraphNode.h"
+#include "ScriptDesignerEditor/Edge/EdNode_ScriptGraphEdge.h"
 
 TSharedRef<FScriptGraphDragConnection> FScriptGraphDragConnection::New(const TSharedRef<SGraphPanel>& GraphPanel, const FDraggedPinTable& DraggedPins)
 {

@@ -3,8 +3,8 @@
 
 #include "AutoLayout/AutoLayoutStrategy.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "ScriptDesignerEditor/EdNode_ScriptGraphNode.h"
-#include "ScriptDesignerEditor/SEdNode_ScriptGraphNode.h"
+#include "ScriptDesignerEditor/Node/EdNode_ScriptGraphNode.h"
+#include "ScriptDesignerEditor/Node/SEdNode_ScriptGraphNode.h"
 
 UAutoLayoutStrategy::UAutoLayoutStrategy()
 {

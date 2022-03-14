@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "ScriptDesignerEditor/SEdNode_ScriptGraphEdge.h"
+#include "ScriptDesignerEditor/Edge/SEdNode_ScriptGraphEdge.h"
 #include "Widgets/Text/SInlineEditableTextBlock.h"
 #include "ConnectionDrawingPolicy.h"
 #include "ScriptGraphEdge.h"
-#include "ScriptDesignerEditor/EdNode_ScriptGraphEdge.h"
+#include "ScriptDesignerEditor/Edge/EdNode_ScriptGraphEdge.h"
 
 #define LOCTEXT_NAMESPACE "SScriptGraphEdge"
 
