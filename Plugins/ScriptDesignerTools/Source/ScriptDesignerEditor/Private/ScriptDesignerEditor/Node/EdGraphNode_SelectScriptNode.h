@@ -13,5 +13,7 @@ UCLASS()
 class SCRIPTDESIGNEREDITOR_API UEdGraphNode_SelectScriptNode : public UEdGraphNode_BaseScriptNode
 {
 	GENERATED_BODY()
-	
+
+protected:
+	virtual void AllocateDefaultPins() override;
 };

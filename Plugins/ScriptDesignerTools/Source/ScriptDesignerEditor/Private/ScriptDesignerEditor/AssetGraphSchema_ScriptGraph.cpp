@@ -7,10 +7,14 @@
 #include "ScriptDesignerEditor/Node/EdNode_ScriptGraphNode.h"
 #include "ScriptDesignerEditor/Edge/EdNode_ScriptGraphEdge.h"
 #include "ScriptDesignerEditor/ConnectionDrawingPolicy_ScriptGraph.h"
+#include "ScriptDesignerEditor/ConnectionDrawingPolicy_BlueprintScriptGraph.h"
+#include "ScriptDesignerEditor/Node/EdGraphNode_BaseScriptNode.h"
 #include "GraphEditorActions.h"
 #include "Framework/Commands/GenericCommands.h"
 #include "AutoLayout/ForceDirectedLayoutStrategy.h"
 #include "AutoLayout/TreeLayoutStrategy.h"
+#include "Node/EdGraphNode_ScriptNode.h"
+#include "Node/EdGraphNode_SelectScriptNode.h"
 
 #define LOCTEXT_NAMESPACE "AssetSchema_ScriptGraph"
 
@@ -106,8 +110,49 @@ void FAssetSchemaAction_ScriptGraph_NewNode::AddReferencedObjects(FReferenceColl
 	Collector.AddReferencedObject(NodeTemplate);
 }
 
-UEdGraphNode* FAssetSchemaAction_ScriptGraph_NewEdge::PerformAction(UEdGraph* ParentGraph, UEdGraphPin* FromPin,
+UEdGraphNode* FAssetSchemaAction_ScriptGraph_NewExtraNode::PerformAction(UEdGraph* ParentGraph, UEdGraphPin* FromPin,
 	const FVector2D Location, bool bSelectNewNode)
+{
+	UEdGraphNode* ResultNode = nullptr;
+
+	if(NodeTemplate != nullptr)
+	{
+		const FScopedTransaction Transaction(LOCTEXT("ScriptGraphEditorNewNode", "Script Graph Editor : New Node"));
+		ParentGraph->Modify();
+
+		if(FromPin != nullptr)
+		{
+			FromPin->Modify();
+		}
+
+		NodeTemplate->Rename(nullptr, ParentGraph);
+		ParentGraph->AddNode(NodeTemplate, true, bSelectNewNode);
+
+		NodeTemplate->CreateNewGuid();
+		NodeTemplate->PostPlacedNewNode();
+		NodeTemplate->AllocateDefaultPins();
+		NodeTemplate->AutowireNewNode(FromPin);
+
+		NodeTemplate->NodePosX = Location.X;
+		NodeTemplate->NodePosY = Location.Y;
+
+		NodeTemplate->GetScriptGraphNode()->SetFlags(RF_Transactional);
+		NodeTemplate->SetFlags(RF_Transactional);
+
+		ResultNode = NodeTemplate;
+	}
+
+	return ResultNode;
+}
+
+void FAssetSchemaAction_ScriptGraph_NewExtraNode::AddReferencedObjects(FReferenceCollector& Collector)
+{
+	FEdGraphSchemaAction::AddReferencedObjects(Collector);
+	Collector.AddReferencedObject(NodeTemplate);
+}
+
+UEdGraphNode* FAssetSchemaAction_ScriptGraph_NewEdge::PerformAction(UEdGraph* ParentGraph, UEdGraphPin* FromPin,
+                                                                    const FVector2D Location, bool bSelectNewNode)
 {
 	UEdGraphNode* ResultNode = nullptr;
 
@@ -221,12 +266,31 @@ void UAssetGraphSchema_ScriptGraph::GetGraphContextActions(FGraphContextMenuBuil
 
 	if(!Graph->GetNodeTypeClass()->HasAnyClassFlags(CLASS_Abstract))
 	{
-		TSharedPtr<FAssetSchemaAction_ScriptGraph_NewNode> NewNodeAction(new FAssetSchemaAction_ScriptGraph_NewNode(LOCTEXT("ScriptGraphNodeAction", "Script Graph Node"), Desc, AddToolTip, 0));
-		NewNodeAction->NodeTemplate = NewObject<UEdNode_ScriptGraphNode>(ContextMenuBuilder.OwnerOfTemporaries);
-		NewNodeAction->NodeTemplate->NewScriptGraphNode(NewNodeAction->NodeTemplate, Graph->GetNodeTypeClass());
-		NewNodeAction->NodeTemplate->GetScriptGraphNode()->SetGraph(Graph);
-		ContextMenuBuilder.AddAction(NewNodeAction);
+		{
+			TSharedPtr<FAssetSchemaAction_ScriptGraph_NewNode> NewNodeAction(new FAssetSchemaAction_ScriptGraph_NewNode(LOCTEXT("ScriptGraphNodeAction", "Script Graph Node"), Desc, AddToolTip, 0));
+			NewNodeAction->NodeTemplate = NewObject<UEdNode_ScriptGraphNode>(ContextMenuBuilder.OwnerOfTemporaries);
+			NewNodeAction->NodeTemplate->NewScriptGraphNode(NewNodeAction->NodeTemplate, Graph->GetNodeTypeClass());
+			NewNodeAction->NodeTemplate->GetScriptGraphNode()->SetGraph(Graph);
+			ContextMenuBuilder.AddAction(NewNodeAction);			
+		}
 
+		
+		{
+			TSharedPtr<FAssetSchemaAction_ScriptGraph_NewExtraNode> ExtraScriptNodeAction(new FAssetSchemaAction_ScriptGraph_NewExtraNode(LOCTEXT("ScriptGraphNodeAction", "Extra Script Graph Node"), Desc, AddToolTip, 0));
+			ExtraScriptNodeAction->NodeTemplate = NewObject<UEdGraphNode_ScriptNode>(ContextMenuBuilder.OwnerOfTemporaries);
+			ExtraScriptNodeAction->NodeTemplate->NewScriptGraphNode(ExtraScriptNodeAction->NodeTemplate, Graph->GetNodeTypeClass());
+			ExtraScriptNodeAction->NodeTemplate->GetScriptGraphNode()->SetGraph(Graph);
+			ContextMenuBuilder.AddAction(ExtraScriptNodeAction);			
+		}
+
+		{
+			TSharedPtr<FAssetSchemaAction_ScriptGraph_NewExtraNode> ExtraSelectScriptNodeAction(new FAssetSchemaAction_ScriptGraph_NewExtraNode(LOCTEXT("ScriptGraphNodeAction", "Extra Select Script Graph Node"), Desc, AddToolTip, 0));
+			ExtraSelectScriptNodeAction->NodeTemplate = NewObject<UEdGraphNode_SelectScriptNode>(ContextMenuBuilder.OwnerOfTemporaries);
+			ExtraSelectScriptNodeAction->NodeTemplate->NewScriptGraphNode(ExtraSelectScriptNodeAction->NodeTemplate, Graph->GetNodeTypeClass());
+			ExtraSelectScriptNodeAction->NodeTemplate->GetScriptGraphNode()->SetGraph(Graph);
+			ContextMenuBuilder.AddAction(ExtraSelectScriptNodeAction);			
+		}
+		
 		Visited.Add(Graph->GetNodeTypeClass());
 	}
 
@@ -362,6 +426,12 @@ bool UAssetGraphSchema_ScriptGraph::TryCreateConnection(UEdGraphPin* A, UEdGraph
 	UEdNode_ScriptGraphNode* NodeA = Cast<UEdNode_ScriptGraphNode>(A->GetOwningNode());
 	UEdNode_ScriptGraphNode* NodeB = Cast<UEdNode_ScriptGraphNode>(B->GetOwningNode());
 
+	if(nullptr == NodeA
+		|| nullptr == NodeB)
+	{
+		return false;
+	}
+
 	//check that this edge doesn't already exist
 	for(UEdGraphPin* TestPin : NodeA->GetOutputPin()->LinkedTo)
 	{
@@ -419,7 +489,8 @@ FConnectionDrawingPolicy* UAssetGraphSchema_ScriptGraph::CreateConnectionDrawing
 	UEdGraph* InGraphObj) const
 {
 	//Line을 그리는 아주 중요한 역할을 수행하는 Policy를 여기서 생성한다.
-	return new FConnectionDrawingPolicy_ScriptGraph(InBackLayerID, InFrontLayerID, InZoomFactor, InClippingRect, InDrawElements, InGraphObj);
+	//return new FConnectionDrawingPolicy_ScriptGraph(InBackLayerID, InFrontLayerID, InZoomFactor, InClippingRect, InDrawElements, InGraphObj);
+	return new FConnectionDrawingPolicy_BlueprintScriptGraph(InBackLayerID, InFrontLayerID, InZoomFactor, InClippingRect, InDrawElements, InGraphObj);
 	
 	//return Super::CreateConnectionDrawingPolicy(InBackLayerID, InFrontLayerID, InZoomFactor, InClippingRect,
 	//                                            InDrawElements, InGraphObj);

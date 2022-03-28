@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "../EdGraph_ScriptGraph.h"
+#include "ScriptDesignerEditor/EdGraph_ScriptGraph.h"
 #include "ScriptGraphNode.h"
 #include "EdGraph/EdGraphNode.h"
 #include "EdNode_ScriptGraphNode.generated.h"
