@@ -114,7 +114,7 @@ FBox2D UForceDirectedLayoutStrategy::LayoutOnTree(UScriptGraphNode* RootNode, co
 			{
 				check(nullptr != ScriptGraphNode);
 
-				UEdNode_ScriptGraphNode* EdNode_ParentNode = EdGraph->FindNode(ScriptGraphNode);
+				UEdGraphNode_BaseScriptNode* EdNode_ParentNode = EdGraph->FindNode(ScriptGraphNode);
 
 				TArray<UScriptGraphNode*>& ChildrenNodes = ScriptGraphNode->GetChildrenNodes();
 
@@ -122,7 +122,7 @@ FBox2D UForceDirectedLayoutStrategy::LayoutOnTree(UScriptGraphNode* RootNode, co
 				{
 					NextLevelNodes.Add(ChildNode);
 
-					UEdNode_ScriptGraphNode* EdNode_ChildNode = EdGraph->FindNode(ChildNode);
+					UEdGraphNode_BaseScriptNode* EdNode_ChildNode = EdGraph->FindNode(ChildNode);
 
 					Diff.X = EdNode_ChildNode->NodePosX - EdNode_ParentNode->NodePosY;
 					Diff.Y = EdNode_ChildNode->NodePosY - EdNode_ParentNode->NodePosY;

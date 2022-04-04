@@ -8,7 +8,6 @@
 #include "SGraphPin.h"
 #include "ScriptDesignerEditor/Colors_ScriptGraph.h"
 #include "ScriptDesignerEditor/ScriptGraphDragConnection.h"
-#include "ScriptDesignerEditor/Node/EdNode_ScriptGraphNode.h"
 #include "ScriptDesignerEditor/Colors_ScriptGraph.h"
 #include "SlateOptMacros.h"
 #include "Widgets/Text/SInlineEditableTextBlock.h"

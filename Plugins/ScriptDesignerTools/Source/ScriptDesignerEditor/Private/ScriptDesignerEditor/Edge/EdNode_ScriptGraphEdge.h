@@ -3,13 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "../Node/EdNode_ScriptGraphNode.h"
 #include "EdGraph/EdGraphNode.h"
 #include "EdNode_ScriptGraphEdge.generated.h"
 
 class UScriptGraphNode;
 class UScriptGraphEdge;
 class UEdNode_ScriptGraphNode;
+class UEdGraphNode_BaseScriptNode;
 
 /**
  * 
@@ -39,8 +39,8 @@ public :
 	virtual UEdGraphPin* GetInputPin() const { return Pins[0]; }
 	virtual UEdGraphPin* GetOutputPin() const { return Pins[1]; }
 
-	void CreateConnection(UEdNode_ScriptGraphNode* Start, UEdNode_ScriptGraphNode* End);
+	void CreateConnection(UEdGraphNode_BaseScriptNode* Start, UEdGraphNode_BaseScriptNode* End);
 
-	UEdNode_ScriptGraphNode* GetStartNode();
-	UEdNode_ScriptGraphNode* GetEndNode();
+	UEdGraphNode_BaseScriptNode* GetStartNode();
+	UEdGraphNode_BaseScriptNode* GetEndNode();
 };

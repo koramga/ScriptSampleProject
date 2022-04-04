@@ -10,28 +10,9 @@
  * 
  */
 
-class UEdNode_ScriptGraphNode;
-class UEdNode_ScriptGraphEdge;
 class UEdGraphNode_BaseScriptNode;
 class UAutoLayoutStrategy;
-
-USTRUCT()
-struct SCRIPTDESIGNEREDITOR_API FAssetSchemaAction_ScriptGraph_NewNode : public FEdGraphSchemaAction
-{
-	GENERATED_USTRUCT_BODY();
-
-public :
-	FAssetSchemaAction_ScriptGraph_NewNode()
-		: NodeTemplate(nullptr) {}
-	
-	FAssetSchemaAction_ScriptGraph_NewNode(const FText& InNodeCategory, const FText& InMenuDesc, const FText& InToolTip, const int32 InGrouping)
-	: FEdGraphSchemaAction(InNodeCategory, InMenuDesc, InToolTip, InGrouping), NodeTemplate(nullptr) {}
-
-	virtual UEdGraphNode* PerformAction(UEdGraph* ParentGraph, UEdGraphPin* FromPin, const FVector2D Location, bool bSelectNewNode = true) override;
-	virtual void AddReferencedObjects(FReferenceCollector& Collector) override;
-
-	UEdNode_ScriptGraphNode* NodeTemplate;
-};
+class UEdNode_ScriptGraphEdge;
 
 USTRUCT()
 struct SCRIPTDESIGNEREDITOR_API FAssetSchemaAction_ScriptGraph_NewExtraNode : public FEdGraphSchemaAction

@@ -8,7 +8,7 @@
 #include "EdGraph/EdGraph.h"
 #include "SGraphPanel.h"
 #include "ScopedTransaction.h"
-#include "ScriptDesignerEditor/Node/EdNode_ScriptGraphNode.h"
+#include "ScriptDesignerEditor/Node/EdGraphNode_BaseScriptNode.h"
 #include "ScriptDesignerEditor/Edge/EdNode_ScriptGraphEdge.h"
 
 TSharedRef<FScriptGraphDragConnection> FScriptGraphDragConnection::New(const TSharedRef<SGraphPanel>& GraphPanel, const FDraggedPinTable& DraggedPins)
@@ -57,7 +57,7 @@ void FScriptGraphDragConnection::HoverTargetChanged()
 			UniqueMessages.AddUnique(Response);
 		}
 	}
-	else if(UEdNode_ScriptGraphNode* TargetNodeObj = Cast<UEdNode_ScriptGraphNode>(GetHoveredNode()))
+	else if(UEdGraphNode_BaseScriptNode* TargetNodeObj = Cast<UEdGraphNode_BaseScriptNode>(GetHoveredNode()))
 	{
 		TArray<UEdGraphPin*> ValidSourcePins;
 		ValidateGraphPinList(ValidSourcePins);

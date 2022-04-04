@@ -1,5 +1,5 @@
 #include "ScriptDesignerEditor/EdGraph_ScriptGraph.h"
-#include "ScriptDesignerEditor/Node/EdNode_ScriptGraphNode.h"
+#include "ScriptDesignerEditor/Node/EdGraphNode_BaseScriptNode.h"
 #include "ScriptDesignerEditor/Edge/EdNode_ScriptGraphEdge.h"
 #include "ScriptGraphEditorPCH.h"
 
@@ -21,7 +21,7 @@ void UEdGraph_ScriptGraph::RebuildGenericGraph()
 
 	for(int i = 0; i < Nodes.Num(); ++i)
 	{
-		if(UEdNode_ScriptGraphNode* EdNode = Cast<UEdNode_ScriptGraphNode>(Nodes[i]))
+		if(UEdGraphNode_BaseScriptNode* EdNode = Cast<UEdGraphNode_BaseScriptNode>(Nodes[i]))
 		{
 			if(EdNode->GetScriptGraphNode() == nullptr)
 				continue;
@@ -42,13 +42,13 @@ void UEdGraph_ScriptGraph::RebuildGenericGraph()
 				for (int LinkToIdx = 0; LinkToIdx < Pin->LinkedTo.Num(); ++LinkToIdx)
 				{
 					UScriptGraphNode* ChildNode = nullptr;
-					if (UEdNode_ScriptGraphNode* EdNode_Child = Cast<UEdNode_ScriptGraphNode>(Pin->LinkedTo[LinkToIdx]->GetOwningNode()))
+					if (UEdGraphNode_BaseScriptNode* EdNode_Child = Cast<UEdGraphNode_BaseScriptNode>(Pin->LinkedTo[LinkToIdx]->GetOwningNode()))
 					{
 						ChildNode = EdNode_Child->GetScriptGraphNode();
 					}
 					else if (UEdNode_ScriptGraphEdge* EdNode_Edge = Cast<UEdNode_ScriptGraphEdge>(Pin->LinkedTo[LinkToIdx]->GetOwningNode()))
 					{
-						UEdNode_ScriptGraphNode* Child = EdNode_Edge->GetEndNode();
+						UEdGraphNode_BaseScriptNode* Child = EdNode_Edge->GetEndNode();
 						if (Child != nullptr)
 						{
 							ChildNode = Child->GetScriptGraphNode();
@@ -69,8 +69,8 @@ void UEdGraph_ScriptGraph::RebuildGenericGraph()
 		}
 		else if (UEdNode_ScriptGraphEdge* EdgeNode = Cast <UEdNode_ScriptGraphEdge>(Nodes[i]))
 		{
-			UEdNode_ScriptGraphNode* StartNode = EdgeNode->GetStartNode();
-			UEdNode_ScriptGraphNode* EndNode = EdgeNode->GetEndNode();
+			UEdGraphNode_BaseScriptNode* StartNode = EdgeNode->GetStartNode();
+			UEdGraphNode_BaseScriptNode* EndNode = EdgeNode->GetEndNode();
 			UScriptGraphEdge* Edge = EdgeNode->GetEdge();
 
 			if (StartNode == nullptr || EndNode == nullptr || Edge == nullptr)
@@ -108,8 +108,8 @@ void UEdGraph_ScriptGraph::RebuildGenericGraph()
 
 	RootNodes.Sort([&](const UScriptGraphNode& L, const UScriptGraphNode& R)
 	{
-		UEdNode_ScriptGraphNode* EdNode_LNode = NodeMap[&L];
-		UEdNode_ScriptGraphNode* EdNode_RNode = NodeMap[&R];
+		UEdGraphNode_BaseScriptNode* EdNode_LNode = NodeMap[&L];
+		UEdGraphNode_BaseScriptNode* EdNode_RNode = NodeMap[&R];
 		return EdNode_LNode->NodePosX < EdNode_RNode->NodePosX;
 	});
 }
@@ -140,7 +140,7 @@ void UEdGraph_ScriptGraph::PostEditUndo()
 	NotifyGraphChanged();
 }
 
-UEdNode_ScriptGraphNode* UEdGraph_ScriptGraph::FindNode(UScriptGraphNode* Key)
+UEdGraphNode_BaseScriptNode* UEdGraph_ScriptGraph::FindNode(UScriptGraphNode* Key)
 {
 	return NodeMap[Key];
 }
@@ -160,7 +160,7 @@ void UEdGraph_ScriptGraph::Clear()
 
 	for (int i = 0; i < Nodes.Num(); ++i)
 	{
-		if (UEdNode_ScriptGraphNode* EdNode = Cast<UEdNode_ScriptGraphNode>(Nodes[i]))
+		if (UEdGraphNode_BaseScriptNode* EdNode = Cast<UEdGraphNode_BaseScriptNode>(Nodes[i]))
 		{
 			UScriptGraphNode* ScriptGraphNode = EdNode->GetScriptGraphNode();
 			if (ScriptGraphNode)
@@ -189,8 +189,8 @@ void UEdGraph_ScriptGraph::SortNodes(UScriptGraphNode* RootNode)
 
 			auto Comp = [&](const UScriptGraphNode& L, const UScriptGraphNode& R)
 			{
-				UEdNode_ScriptGraphNode* EdNode_LNode = NodeMap[&L];
-				UEdNode_ScriptGraphNode* EdNode_RNode = NodeMap[&R];
+				UEdGraphNode_BaseScriptNode* EdNode_LNode = NodeMap[&L];
+				UEdGraphNode_BaseScriptNode* EdNode_RNode = NodeMap[&R];
 				return EdNode_LNode->NodePosX < EdNode_RNode->NodePosX;
 			};
 

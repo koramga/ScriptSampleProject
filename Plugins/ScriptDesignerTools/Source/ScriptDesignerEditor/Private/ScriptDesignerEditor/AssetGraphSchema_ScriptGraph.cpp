@@ -4,7 +4,7 @@
 #include "ScriptDesignerEditor/AssetGraphSchema_ScriptGraph.h"
 #include "ToolMenus.h"
 #include "ScriptGraphEditorPCH.h"
-#include "ScriptDesignerEditor/Node/EdNode_ScriptGraphNode.h"
+#include "ScriptDesignerEditor/Node/EdGraphNode_BaseScriptNode.h"
 #include "ScriptDesignerEditor/Edge/EdNode_ScriptGraphEdge.h"
 #include "ScriptDesignerEditor/ConnectionDrawingPolicy_ScriptGraph.h"
 #include "ScriptDesignerEditor/ConnectionDrawingPolicy_BlueprintScriptGraph.h"
@@ -68,47 +68,6 @@ private :
 	TSet<UEdGraphNode*> VisitedNodes;
 	TSet<UEdGraphNode*> FinishedNodes;
 };
-
-UEdGraphNode* FAssetSchemaAction_ScriptGraph_NewNode::PerformAction(UEdGraph* ParentGraph, UEdGraphPin* FromPin,
-	const FVector2D Location, bool bSelectNewNode)
-{
-	UEdGraphNode* ResultNode = nullptr;
-
-	if(NodeTemplate != nullptr)
-	{
-		const FScopedTransaction Transaction(LOCTEXT("ScriptGraphEditorNewNode", "Script Graph Editor : New Node"));
-		ParentGraph->Modify();
-
-		if(FromPin != nullptr)
-		{
-			FromPin->Modify();
-		}
-
-		NodeTemplate->Rename(nullptr, ParentGraph);
-		ParentGraph->AddNode(NodeTemplate, true, bSelectNewNode);
-
-		NodeTemplate->CreateNewGuid();
-		NodeTemplate->PostPlacedNewNode();
-		NodeTemplate->AllocateDefaultPins();
-		NodeTemplate->AutowireNewNode(FromPin);
-
-		NodeTemplate->NodePosX = Location.X;
-		NodeTemplate->NodePosY = Location.Y;
-
-		NodeTemplate->GetScriptGraphNode()->SetFlags(RF_Transactional);
-		NodeTemplate->SetFlags(RF_Transactional);
-
-		ResultNode = NodeTemplate;
-	}
-
-	return ResultNode;
-}
-
-void FAssetSchemaAction_ScriptGraph_NewNode::AddReferencedObjects(FReferenceCollector& Collector)
-{
-	FEdGraphSchemaAction::AddReferencedObjects(Collector);
-	Collector.AddReferencedObject(NodeTemplate);
-}
 
 UEdGraphNode* FAssetSchemaAction_ScriptGraph_NewExtraNode::PerformAction(UEdGraph* ParentGraph, UEdGraphPin* FromPin,
 	const FVector2D Location, bool bSelectNewNode)
@@ -267,15 +226,6 @@ void UAssetGraphSchema_ScriptGraph::GetGraphContextActions(FGraphContextMenuBuil
 	if(!Graph->GetNodeTypeClass()->HasAnyClassFlags(CLASS_Abstract))
 	{
 		{
-			TSharedPtr<FAssetSchemaAction_ScriptGraph_NewNode> NewNodeAction(new FAssetSchemaAction_ScriptGraph_NewNode(LOCTEXT("ScriptGraphNodeAction", "Script Graph Node"), Desc, AddToolTip, 0));
-			NewNodeAction->NodeTemplate = NewObject<UEdNode_ScriptGraphNode>(ContextMenuBuilder.OwnerOfTemporaries);
-			NewNodeAction->NodeTemplate->NewScriptGraphNode(NewNodeAction->NodeTemplate, Graph->GetNodeTypeClass());
-			NewNodeAction->NodeTemplate->GetScriptGraphNode()->SetGraph(Graph);
-			ContextMenuBuilder.AddAction(NewNodeAction);			
-		}
-
-		
-		{
 			TSharedPtr<FAssetSchemaAction_ScriptGraph_NewExtraNode> ExtraScriptNodeAction(new FAssetSchemaAction_ScriptGraph_NewExtraNode(LOCTEXT("ScriptGraphNodeAction", "Extra Script Graph Node"), Desc, AddToolTip, 0));
 			ExtraScriptNodeAction->NodeTemplate = NewObject<UEdGraphNode_ScriptNode>(ContextMenuBuilder.OwnerOfTemporaries);
 			ExtraScriptNodeAction->NodeTemplate->NewScriptGraphNode(ExtraScriptNodeAction->NodeTemplate, Graph->GetNodeTypeClass());
@@ -314,12 +264,6 @@ void UAssetGraphSchema_ScriptGraph::GetGraphContextActions(FGraphContextMenuBuil
 				Title.RemoveFromEnd("_C");
 				Desc = FText::FromString(Title);
 			}
-
-			TSharedPtr<FAssetSchemaAction_ScriptGraph_NewNode> NewNodeAction(new FAssetSchemaAction_ScriptGraph_NewNode(LOCTEXT("ScriptGraphNodeAction", "Script Graph Node"), Desc, AddToolTip, 0));
-			NewNodeAction->NodeTemplate = NewObject<UEdNode_ScriptGraphNode>(ContextMenuBuilder.OwnerOfTemporaries);
-			NewNodeAction->NodeTemplate->NewScriptGraphNode(NewNodeAction->NodeTemplate, NodeType);
-			NewNodeAction->NodeTemplate->GetScriptGraphNode()->SetGraph(Graph);
-			ContextMenuBuilder.AddAction(NewNodeAction);
 
 			Visited.Add(NodeType);
 		}
@@ -377,8 +321,8 @@ const FPinConnectionResponse UAssetGraphSchema_ScriptGraph::CanCreateConnection(
 	const UEdGraphPin* Out = A;
 	const UEdGraphPin* In = B;
 
-	UEdNode_ScriptGraphNode* EdNode_Out = Cast<UEdNode_ScriptGraphNode>(Out->GetOwningNode());
-	UEdNode_ScriptGraphNode* EdNode_In = Cast<UEdNode_ScriptGraphNode>(In->GetOwningNode());
+	UEdGraphNode_BaseScriptNode* EdNode_Out = Cast<UEdGraphNode_BaseScriptNode>(Out->GetOwningNode());
+	UEdGraphNode_BaseScriptNode* EdNode_In = Cast<UEdGraphNode_BaseScriptNode>(In->GetOwningNode());
 
 	if(EdNode_Out == nullptr || EdNode_In == nullptr)
 	{
@@ -423,8 +367,8 @@ const FPinConnectionResponse UAssetGraphSchema_ScriptGraph::CanCreateConnection(
 bool UAssetGraphSchema_ScriptGraph::TryCreateConnection(UEdGraphPin* A, UEdGraphPin* B) const
 {
 	//We don't actually care about the pin, we want the node that is being dragged between
-	UEdNode_ScriptGraphNode* NodeA = Cast<UEdNode_ScriptGraphNode>(A->GetOwningNode());
-	UEdNode_ScriptGraphNode* NodeB = Cast<UEdNode_ScriptGraphNode>(B->GetOwningNode());
+	UEdGraphNode_BaseScriptNode* NodeA = Cast<UEdGraphNode_BaseScriptNode>(A->GetOwningNode());
+	UEdGraphNode_BaseScriptNode* NodeB = Cast<UEdGraphNode_BaseScriptNode>(B->GetOwningNode());
 
 	if(nullptr == NodeA
 		|| nullptr == NodeB)
@@ -460,8 +404,8 @@ bool UAssetGraphSchema_ScriptGraph::TryCreateConnection(UEdGraphPin* A, UEdGraph
 
 bool UAssetGraphSchema_ScriptGraph::CreateAutomaticConversionNodeAndConnections(UEdGraphPin* A, UEdGraphPin* B) const
 {
-	UEdNode_ScriptGraphNode* NodeA = Cast<UEdNode_ScriptGraphNode>(A->GetOwningNode());
-	UEdNode_ScriptGraphNode* NodeB = Cast<UEdNode_ScriptGraphNode>(B->GetOwningNode());
+	UEdGraphNode_BaseScriptNode* NodeA = Cast<UEdGraphNode_BaseScriptNode>(A->GetOwningNode());
+	UEdGraphNode_BaseScriptNode* NodeB = Cast<UEdGraphNode_BaseScriptNode>(B->GetOwningNode());
 
 	//Are nodes and pins all valid?
 	if(!NodeA || !NodeA->GetOutputPin() || !NodeB || !NodeB->GetInputPin())
@@ -525,7 +469,7 @@ void UAssetGraphSchema_ScriptGraph::BreakSinglePinLink(UEdGraphPin* SourcePin, U
 UEdGraphPin* UAssetGraphSchema_ScriptGraph::DropPinOnNode(UEdGraphNode* InTargetNode, const FName& InSourcePinName,
 	const FEdGraphPinType& InSourcePinType, EEdGraphPinDirection InSourcePinDirection) const
 {
-	UEdNode_ScriptGraphNode* EdNode = Cast<UEdNode_ScriptGraphNode>(InTargetNode);
+	UEdGraphNode_BaseScriptNode* EdNode = Cast<UEdGraphNode_BaseScriptNode>(InTargetNode);
 
 	switch (InSourcePinDirection)
 	{
@@ -543,7 +487,7 @@ UEdGraphPin* UAssetGraphSchema_ScriptGraph::DropPinOnNode(UEdGraphNode* InTarget
 bool UAssetGraphSchema_ScriptGraph::SupportsDropPinOnNode(UEdGraphNode* InTargetNode,
 	const FEdGraphPinType& InSourcePinType, EEdGraphPinDirection InSourcePinDirection, FText& OutErrorMessage) const
 {
-	return Cast<UEdNode_ScriptGraphNode>(InTargetNode) != nullptr;
+	return Cast<UEdGraphNode_BaseScriptNode>(InTargetNode) != nullptr;
 }
 
 bool UAssetGraphSchema_ScriptGraph::IsCacheVisualizationOutOfDate(int32 InVisualizationCacheID) const

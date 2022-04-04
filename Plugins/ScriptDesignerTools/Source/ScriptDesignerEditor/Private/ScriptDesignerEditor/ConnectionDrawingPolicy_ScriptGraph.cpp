@@ -1,5 +1,5 @@
 #include "ScriptDesignerEditor/ConnectionDrawingPolicy_ScriptGraph.h"
-#include "ScriptDesignerEditor/Node/EdNode_ScriptGraphNode.h"
+#include "ScriptDesignerEditor/Node/EdGraphNode_BaseScriptNode.h"
 #include "ScriptDesignerEditor/Edge/EdNode_ScriptGraphEdge.h"
 
 FConnectionDrawingPolicy_ScriptGraph::FConnectionDrawingPolicy_ScriptGraph(int32 InBackLayerID,
@@ -95,8 +95,8 @@ void FConnectionDrawingPolicy_ScriptGraph::DetermineLinkGeometry(FArrangedChildr
 {
 	if(UEdNode_ScriptGraphEdge* EdgeNode = Cast<UEdNode_ScriptGraphEdge>(InputPin->GetOwningNode()))
 	{
-		UEdNode_ScriptGraphNode* Start = EdgeNode->GetStartNode();
-		UEdNode_ScriptGraphNode* End = EdgeNode->GetEndNode();
+		UEdGraphNode_BaseScriptNode* Start = EdgeNode->GetStartNode();
+		UEdGraphNode_BaseScriptNode* End = EdgeNode->GetEndNode();
 
 		if(Start != nullptr && End != nullptr)
 		{

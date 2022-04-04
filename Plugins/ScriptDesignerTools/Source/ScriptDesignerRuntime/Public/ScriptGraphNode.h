@@ -99,6 +99,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category="ScriptGraphNode_Editor", meta = (ClampMin = "0",EditCondition = "ParentLimitType == ENodeLimit::Limited", EditConditionHides))
 	int32 ChildrenLimit;
+
+	UPROPERTY(EditDefaultsOnly, Category="ScriptGraphNode_Editor")
+	TArray<FString>				BehaviorStrings;
 	
 #endif
 
@@ -108,6 +111,7 @@ public :
 	virtual FLinearColor GetBackgroundColor() const;
 	virtual FText GetNodeTitle() const;
 	virtual FText GetContextMenuName() const;
+	virtual TArray<FText> GetBehaviorTexts() const;
 	const TSubclassOf<UScriptGraphNode>& GetCompatibleGraphType() const;
 	virtual void SetNodeTitle(const FText& NewTitle);
 	virtual bool CanCreateConnection(UScriptGraphNode* Other, FText& ErrorMessage);

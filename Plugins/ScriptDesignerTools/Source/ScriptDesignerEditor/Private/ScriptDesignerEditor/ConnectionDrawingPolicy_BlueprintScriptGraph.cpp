@@ -1,5 +1,5 @@
 ﻿#include "ScriptDesignerEditor/ConnectionDrawingPolicy_BlueprintScriptGraph.h"
-
+#include "ScriptDesignerEditor/Node/EdGraphNode_BaseScriptNode.h"
 #include "Edge/EdNode_ScriptGraphEdge.h"
 
 int32 FConnectionDrawingPolicy_BlueprintScriptGraph::FindGraphNodeIndexFromArrangedWidget(
@@ -33,8 +33,8 @@ void FConnectionDrawingPolicy_BlueprintScriptGraph::DetermineLinkGeometry(FArran
 {
 	if(UEdNode_ScriptGraphEdge* EdgeNode = Cast<UEdNode_ScriptGraphEdge>(InputPin->GetOwningNode()))
 	{
-		UEdNode_ScriptGraphNode* Start = EdgeNode->GetStartNode();
-		UEdNode_ScriptGraphNode* End = EdgeNode->GetEndNode();
+		UEdGraphNode_BaseScriptNode* Start = EdgeNode->GetStartNode();
+		UEdGraphNode_BaseScriptNode* End = EdgeNode->GetEndNode();
 
 		if(Start != nullptr && End != nullptr)
 		{			

@@ -24,6 +24,33 @@ void SGraphNode_SelectScriptNode::UpdateGraphNode()
 void SGraphNode_SelectScriptNode::SetDefaultTitleAreaWidget(TSharedRef<SOverlay> DefaultTitleAreaWidget)
 {
 	DefaultTitleAreaWidget->ClearChildren();
+
+	TSharedPtr<SVerticalBox> VerticalBox;
+	
+	SAssignNew(VerticalBox, SVerticalBox);
+
+	UEdGraphNode_SelectScriptNode* SelectScriptNode = Cast<UEdGraphNode_SelectScriptNode>(GraphNode);
+
+	if(IsValid(SelectScriptNode))
+	{
+		UScriptGraphNode* ScriptGraphNode = SelectScriptNode->GetScriptGraphNode();
+		
+		if(IsValid(ScriptGraphNode))
+		{
+			TArray<FText> Texts = ScriptGraphNode->GetBehaviorTexts();
+
+			for(const FText& Text : Texts)
+			{
+				VerticalBox->AddSlot()
+				[
+					SNew(STextBlock)
+					.Text(Text)
+				];
+			}
+		}
+	}
+	
+	
 	
 	DefaultTitleAreaWidget->AddSlot()
 	[
@@ -45,10 +72,9 @@ void SGraphNode_SelectScriptNode::SetDefaultTitleAreaWidget(TSharedRef<SOverlay>
 			.Padding( FMargin(10,5,30,3) )
 			.BorderBackgroundColor( this, &SGraphNode::GetNodeTitleColor )
 			.VAlign(VAlign_Fill)
-			.HAlign(HAlign_Center)
+			.HAlign(HAlign_Fill)
 			[
-				SNew(STextBlock)
-				.Text(FText::FromString("Hello World"))
+				VerticalBox.ToSharedRef()
 			]
 		]
 	];

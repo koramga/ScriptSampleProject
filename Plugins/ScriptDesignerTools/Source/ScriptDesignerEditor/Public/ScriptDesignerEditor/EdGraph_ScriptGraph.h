@@ -14,7 +14,8 @@ class UScriptGraph;
 class UScriptGraphNode;
 class UScriptGraphEdge;
 class UEdNode_ScriptGraphEdge;
-class UEdNode_ScriptGraphNode;
+class UEdGraphNode_BaseScriptNode;
+
 
 UCLASS()
 class SCRIPTDESIGNEREDITOR_API UEdGraph_ScriptGraph : public UEdGraph
@@ -34,13 +35,13 @@ public :
 
 protected:
 	UPROPERTY(Transient)
-	TMap<UScriptGraphNode*, UEdNode_ScriptGraphNode*> NodeMap;
+	TMap<UScriptGraphNode*, UEdGraphNode_BaseScriptNode*> NodeMap;
 
 	UPROPERTY(Transient)
 	TMap<UScriptGraphEdge*, UEdNode_ScriptGraphEdge*> EdgeMap;
 
 public :
-	UEdNode_ScriptGraphNode* FindNode(UScriptGraphNode* Key);
+	UEdGraphNode_BaseScriptNode* FindNode(UScriptGraphNode* Key);
 	UEdNode_ScriptGraphEdge* FindEdge(UScriptGraphEdge* Key);	
 
 protected:

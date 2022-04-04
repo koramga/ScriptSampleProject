@@ -15,7 +15,7 @@
 #include "ScriptDesignerEditor/EdGraph_ScriptGraph.h"
 #include "ScriptDesignerEditor/EditorCommands_ScriptGraph.h"
 #include "ScriptDesignerEditor/Edge/EdNode_ScriptGraphEdge.h"
-#include "ScriptDesignerEditor/Node/EdNode_ScriptGraphNode.h"
+#include "ScriptDesignerEditor/Node/EdGraphNode_BaseScriptNode.h"
 
 
 #define LOCTEXT_NAMESPACE "AssetEditor_ScriptGraph"
@@ -448,7 +448,7 @@ void FAssetEditor_ScriptGraph::DeleteSelectedNodes()
 		if (EdNode == nullptr || !EdNode->CanUserDeleteNode())
 			continue;;
 
-		if (UEdNode_ScriptGraphNode* EdNode_Node = Cast<UEdNode_ScriptGraphNode>(EdNode))
+		if (UEdGraphNode_BaseScriptNode* EdNode_Node = Cast<UEdGraphNode_BaseScriptNode>(EdNode))
 		{
 			EdNode_Node->Modify();
 
@@ -549,8 +549,8 @@ void FAssetEditor_ScriptGraph::CopySelectedNodes()
 
 		if(UEdNode_ScriptGraphEdge* EdNode_Edge = Cast<UEdNode_ScriptGraphEdge>(*SelectedIter))
 		{
-			UEdNode_ScriptGraphNode* StartNode = EdNode_Edge->GetStartNode();
-			UEdNode_ScriptGraphNode* EndNode = EdNode_Edge->GetEndNode();
+			UEdGraphNode_BaseScriptNode* StartNode = EdNode_Edge->GetStartNode();
+			UEdGraphNode_BaseScriptNode* EndNode = EdNode_Edge->GetEndNode();
 
 			if(!SelectedNodes.Contains(StartNode) || !SelectedNodes.Contains(EndNode))
 			{

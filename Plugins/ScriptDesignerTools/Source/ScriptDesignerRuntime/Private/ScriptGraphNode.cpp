@@ -137,6 +137,18 @@ FText UScriptGraphNode::GetContextMenuName() const
 	return ContextMenuName;
 }
 
+TArray<FText> UScriptGraphNode::GetBehaviorTexts() const
+{
+	TArray<FText> BehaviorTexts;
+	
+	for(const FString& BehaviorString : BehaviorStrings)
+	{
+		BehaviorTexts.Add(FText::FromString(BehaviorString));
+	}
+
+	return BehaviorTexts;
+}
+
 const TSubclassOf<UScriptGraphNode>& UScriptGraphNode::GetCompatibleGraphType() const
 {
 	return CompatibleGraphType;

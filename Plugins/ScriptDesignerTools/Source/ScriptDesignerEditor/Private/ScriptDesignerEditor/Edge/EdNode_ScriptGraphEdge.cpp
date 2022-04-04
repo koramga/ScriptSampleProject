@@ -4,6 +4,7 @@
 #include "ScriptDesignerEditor/Edge/EdNode_ScriptGraphEdge.h"
 
 #include "ScriptGraphEdge.h"
+#include "ScriptDesignerEditor/Node/EdGraphNode_BaseScriptNode.h"
 
 UEdNode_ScriptGraphEdge::UEdNode_ScriptGraphEdge()
 {
@@ -60,7 +61,7 @@ void UEdNode_ScriptGraphEdge::PrepareForCopying()
 	ScriptGraphEdge->Rename(nullptr, this, REN_DontCreateRedirectors | REN_DoNotDirty);
 }
 
-void UEdNode_ScriptGraphEdge::CreateConnection(UEdNode_ScriptGraphNode* Start, UEdNode_ScriptGraphNode* End)
+void UEdNode_ScriptGraphEdge::CreateConnection(UEdGraphNode_BaseScriptNode* Start, UEdGraphNode_BaseScriptNode* End)
 {
 	Pins[0]->Modify();
 	Pins[0]->LinkedTo.Empty();
@@ -76,11 +77,11 @@ void UEdNode_ScriptGraphEdge::CreateConnection(UEdNode_ScriptGraphNode* Start, U
 	Pins[1]->MakeLinkTo((End->GetInputPin()));
 }
 
-UEdNode_ScriptGraphNode* UEdNode_ScriptGraphEdge::GetStartNode()
+UEdGraphNode_BaseScriptNode* UEdNode_ScriptGraphEdge::GetStartNode()
 {
 	if(Pins[0]->LinkedTo.Num() > 0)
 	{
-		return Cast<UEdNode_ScriptGraphNode>(Pins[0]->LinkedTo[0]->GetOwningNode());
+		return Cast<UEdGraphNode_BaseScriptNode>(Pins[0]->LinkedTo[0]->GetOwningNode());
 	}
 	else
 	{
@@ -88,11 +89,11 @@ UEdNode_ScriptGraphNode* UEdNode_ScriptGraphEdge::GetStartNode()
 	}
 }
 
-UEdNode_ScriptGraphNode* UEdNode_ScriptGraphEdge::GetEndNode()
+UEdGraphNode_BaseScriptNode* UEdNode_ScriptGraphEdge::GetEndNode()
 {
 	if(Pins[1]->LinkedTo.Num() > 0)
 	{
-		return Cast<UEdNode_ScriptGraphNode>(Pins[1]->LinkedTo[0]->GetOwningNode());
+		return Cast<UEdGraphNode_BaseScriptNode>(Pins[1]->LinkedTo[0]->GetOwningNode());
 	}
 	else
 	{

@@ -6,6 +6,7 @@
 #include "ConnectionDrawingPolicy.h"
 #include "ScriptGraphEdge.h"
 #include "ScriptDesignerEditor/Edge/EdNode_ScriptGraphEdge.h"
+#include "ScriptDesignerEditor/Node/EdGraphNode_BaseScriptNode.h"
 
 #define LOCTEXT_NAMESPACE "SScriptGraphEdge"
 
@@ -28,8 +29,8 @@ void SEdNode_ScriptGraphEdge::PerformSecondPassLayout(
 	FGeometry StartGeom;
 	FGeometry EndGeom;
 
-	UEdNode_ScriptGraphNode* Start = EdgeNode->GetStartNode();
-	UEdNode_ScriptGraphNode* End = EdgeNode->GetEndNode();
+	UEdGraphNode_BaseScriptNode* Start = EdgeNode->GetStartNode();
+	UEdGraphNode_BaseScriptNode* End = EdgeNode->GetEndNode();
 	
 	if(nullptr != Start && nullptr != End)
 	{
