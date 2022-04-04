@@ -3,9 +3,10 @@
 #include "ScriptDesignerEditor.h"
 
 #include "AssetToolsModule.h"
-#include "ScriptGraphNodeFactory.h"
+#include "ScriptDesignerEditor/Private/Factory/ScriptGraphFactory.h"
 #include "ScriptDesignerEditor/ScriptGraphEditorStyle.h"
 #include "AssetTypeActions_ScriptGraph.h"
+#include "Factory/ScriptGraphNodeFactory.h"
 
 #define LOCTEXT_NAMESPACE "FScriptDesignerEditorModule"
 

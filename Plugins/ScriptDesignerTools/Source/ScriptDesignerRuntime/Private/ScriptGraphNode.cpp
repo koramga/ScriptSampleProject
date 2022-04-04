@@ -137,6 +137,11 @@ FText UScriptGraphNode::GetContextMenuName() const
 	return ContextMenuName;
 }
 
+void UScriptGraphNode::SetContextMenuName(const FString& InMenuName)
+{
+	ContextMenuName = FText::FromString(InMenuName); 
+}
+
 TArray<FText> UScriptGraphNode::GetBehaviorTexts() const
 {
 	TArray<FText> BehaviorTexts;

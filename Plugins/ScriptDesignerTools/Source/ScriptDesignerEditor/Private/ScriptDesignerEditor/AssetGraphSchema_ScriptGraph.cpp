@@ -11,8 +11,6 @@
 #include "ScriptDesignerEditor/Node/EdGraphNode_BaseScriptNode.h"
 #include "GraphEditorActions.h"
 #include "Framework/Commands/GenericCommands.h"
-#include "AutoLayout/ForceDirectedLayoutStrategy.h"
-#include "AutoLayout/TreeLayoutStrategy.h"
 #include "Node/EdGraphNode_ScriptNode.h"
 #include "Node/EdGraphNode_SelectScriptNode.h"
 
@@ -214,30 +212,53 @@ void UAssetGraphSchema_ScriptGraph::GetGraphContextActions(FGraphContextMenuBuil
 
 	TSet<TSubclassOf<UScriptGraphNode>> Visited;
 
-	FText Desc = Graph->GetNodeTypeClass().GetDefaultObject()->GetContextMenuName();
+	//FText Desc = Graph->GetNodeTypeClass().GetDefaultObject()->GetContextMenuName();
 
-	if(Desc.IsEmpty())
-	{
-		FString Title = Graph->GetNodeTypeClass()->GetName();
-		Title.RemoveFromEnd("_C");
-		Desc = FText::FromString(Title);
-	}
+	//if(Desc.IsEmpty())
+	//{
+	//	FString Title = Graph->GetNodeTypeClass()->GetName();
+	//	Title.RemoveFromEnd("_C");
+	//	Desc = FText::FromString(Title);
+	//}
 
 	if(!Graph->GetNodeTypeClass()->HasAnyClassFlags(CLASS_Abstract))
 	{
 		{
-			TSharedPtr<FAssetSchemaAction_ScriptGraph_NewExtraNode> ExtraScriptNodeAction(new FAssetSchemaAction_ScriptGraph_NewExtraNode(LOCTEXT("ScriptGraphNodeAction", "Extra Script Graph Node"), Desc, AddToolTip, 0));
+			TSharedPtr<FAssetSchemaAction_ScriptGraph_NewExtraNode> ExtraScriptNodeAction(new FAssetSchemaAction_ScriptGraph_NewExtraNode(LOCTEXT("GraphNodeTitle", "Graph Node"), FText::FromString(TEXT("RootNode")), AddToolTip, 0));
 			ExtraScriptNodeAction->NodeTemplate = NewObject<UEdGraphNode_ScriptNode>(ContextMenuBuilder.OwnerOfTemporaries);
 			ExtraScriptNodeAction->NodeTemplate->NewScriptGraphNode(ExtraScriptNodeAction->NodeTemplate, Graph->GetNodeTypeClass());
 			ExtraScriptNodeAction->NodeTemplate->GetScriptGraphNode()->SetGraph(Graph);
+			ExtraScriptNodeAction->NodeTemplate->GetScriptGraphNode()->SetNodeTitle(FText::FromString(TEXT("Root")));
+			ExtraScriptNodeAction->NodeTemplate->GetScriptGraphNode()->SetContextMenuName("RootNode");
 			ContextMenuBuilder.AddAction(ExtraScriptNodeAction);			
+		}
+		
+		{
+			TSharedPtr<FAssetSchemaAction_ScriptGraph_NewExtraNode> ExtraScriptNodeAction(new FAssetSchemaAction_ScriptGraph_NewExtraNode(LOCTEXT("GraphNodeTitle", "Graph Node"), FText::FromString(TEXT("SuccessNode")), AddToolTip, 0));
+			ExtraScriptNodeAction->NodeTemplate = NewObject<UEdGraphNode_ScriptNode>(ContextMenuBuilder.OwnerOfTemporaries);
+			ExtraScriptNodeAction->NodeTemplate->NewScriptGraphNode(ExtraScriptNodeAction->NodeTemplate, Graph->GetNodeTypeClass());
+			ExtraScriptNodeAction->NodeTemplate->GetScriptGraphNode()->SetGraph(Graph);
+			ExtraScriptNodeAction->NodeTemplate->GetScriptGraphNode()->SetNodeTitle(FText::FromString(TEXT("Success")));
+			ExtraScriptNodeAction->NodeTemplate->GetScriptGraphNode()->SetContextMenuName("SuccessNode");
+			ContextMenuBuilder.AddAction(ExtraScriptNodeAction);			
+		}
+		
+		{
+			TSharedPtr<FAssetSchemaAction_ScriptGraph_NewExtraNode> ExtraScriptNodeAction(new FAssetSchemaAction_ScriptGraph_NewExtraNode(LOCTEXT("GraphNodeTitle", "Graph Node"), FText::FromString(TEXT("FailureNode")), AddToolTip, 0));
+			ExtraScriptNodeAction->NodeTemplate = NewObject<UEdGraphNode_ScriptNode>(ContextMenuBuilder.OwnerOfTemporaries);
+			ExtraScriptNodeAction->NodeTemplate->NewScriptGraphNode(ExtraScriptNodeAction->NodeTemplate, Graph->GetNodeTypeClass());
+			ExtraScriptNodeAction->NodeTemplate->GetScriptGraphNode()->SetGraph(Graph);
+			ExtraScriptNodeAction->NodeTemplate->GetScriptGraphNode()->SetNodeTitle(FText::FromString(TEXT("Failure")));
+			ExtraScriptNodeAction->NodeTemplate->GetScriptGraphNode()->SetContextMenuName("FailureNode");
+			ContextMenuBuilder.AddAction(ExtraScriptNodeAction);
 		}
 
 		{
-			TSharedPtr<FAssetSchemaAction_ScriptGraph_NewExtraNode> ExtraSelectScriptNodeAction(new FAssetSchemaAction_ScriptGraph_NewExtraNode(LOCTEXT("ScriptGraphNodeAction", "Extra Select Script Graph Node"), Desc, AddToolTip, 0));
+			TSharedPtr<FAssetSchemaAction_ScriptGraph_NewExtraNode> ExtraSelectScriptNodeAction(new FAssetSchemaAction_ScriptGraph_NewExtraNode(LOCTEXT("ActionGraphNodeTitle", "Action Graph Node"), FText::FromString(TEXT("ActionNode")), AddToolTip, 0));
 			ExtraSelectScriptNodeAction->NodeTemplate = NewObject<UEdGraphNode_SelectScriptNode>(ContextMenuBuilder.OwnerOfTemporaries);
 			ExtraSelectScriptNodeAction->NodeTemplate->NewScriptGraphNode(ExtraSelectScriptNodeAction->NodeTemplate, Graph->GetNodeTypeClass());
 			ExtraSelectScriptNodeAction->NodeTemplate->GetScriptGraphNode()->SetGraph(Graph);
+			ExtraSelectScriptNodeAction->NodeTemplate->GetScriptGraphNode()->SetContextMenuName("ActionNode");
 			ContextMenuBuilder.AddAction(ExtraSelectScriptNodeAction);			
 		}
 		
@@ -256,7 +277,7 @@ void UAssetGraphSchema_ScriptGraph::GetGraphContextActions(FGraphContextMenuBuil
 			if (!Graph->GetClass()->IsChildOf(NodeType.GetDefaultObject()->GetCompatibleGraphType()))
 				continue;
 
-			Desc = NodeType.GetDefaultObject()->GetContextMenuName();
+			FText Desc = NodeType.GetDefaultObject()->GetContextMenuName();
 
 			if (Desc.IsEmpty())
 			{
@@ -365,7 +386,7 @@ const FPinConnectionResponse UAssetGraphSchema_ScriptGraph::CanCreateConnection(
 }
 
 bool UAssetGraphSchema_ScriptGraph::TryCreateConnection(UEdGraphPin* A, UEdGraphPin* B) const
-{
+{	
 	//We don't actually care about the pin, we want the node that is being dragged between
 	UEdGraphNode_BaseScriptNode* NodeA = Cast<UEdGraphNode_BaseScriptNode>(A->GetOwningNode());
 	UEdGraphNode_BaseScriptNode* NodeB = Cast<UEdGraphNode_BaseScriptNode>(B->GetOwningNode());
@@ -394,7 +415,20 @@ bool UAssetGraphSchema_ScriptGraph::TryCreateConnection(UEdGraphPin* A, UEdGraph
 	if(NodeA && NodeB)
 	{
 		//Always create connections from node A to B, don't allow adding in reversee
-		Super::TryCreateConnection(NodeA->GetOutputPin(), NodeB->GetInputPin());
+
+		UEdGraphPin* ToPin = NodeA->GetOutputPin();
+		UEdGraphPin* FromPin = NodeB->GetInputPin();
+		
+		if(NodeA->IsA(UEdGraphNode_SelectScriptNode::StaticClass()))
+		{
+			ToPin = A;
+		}
+		else if(NodeB->IsA(UEdGraphNode_BaseScriptNode::StaticClass()))
+		{
+			FromPin = B;
+		}
+		
+		Super::TryCreateConnection(ToPin, FromPin);
 
 		return true;
 	}

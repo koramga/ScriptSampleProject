@@ -33,6 +33,7 @@ void FAssetEditorToolbar_ScriptGraph::FillScriptGraphToolbar(FToolBarBuilder& To
 	}
 	ToolBarBuilder.EndSection();
 
+#ifdef ENABLE_AUTO_ARRANGE
 	ToolBarBuilder.BeginSection("Util");
 	{
 		ToolBarBuilder.AddToolBarButton(FEditorCommands_ScriptGraph::Get().AutoArrange,
@@ -42,6 +43,7 @@ void FAssetEditorToolbar_ScriptGraph::FillScriptGraphToolbar(FToolBarBuilder& To
 			FSlateIcon(FScriptGraphEditorStyle::GetStyleSetName(), "ScriptGraphEditor.AutoArrange"));
 	}
 	ToolBarBuilder.EndSection();
+#endif
 }
 
 #undef LOCTEXT_NAMESPACE

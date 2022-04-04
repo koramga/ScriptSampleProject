@@ -5,7 +5,7 @@
 
 void UEdGraphNode_SelectScriptNode::AllocateDefaultPins()
 {
-	CreatePin(EGPD_Input, "MultipleNodes", FName(), TEXT("Start"));
-	CreatePin(EGPD_Output, "MultipleNodes", FName(), TEXT("True"));
-	CreatePin(EGPD_Output, "MultipleNodes", FName(), TEXT("False"));
+	CreatePin(EGPD_Input, "WorkNode", FName(), TEXT("Work"));
+	CreatePin(EGPD_Output, "TrueNode", FName(), TEXT("True"));
+	CreatePin(EGPD_Output, "FalseNode", FName(), TEXT("False"));
 }

@@ -111,6 +111,7 @@ public :
 	virtual FLinearColor GetBackgroundColor() const;
 	virtual FText GetNodeTitle() const;
 	virtual FText GetContextMenuName() const;
+	void SetContextMenuName(const FString& InMenuName);
 	virtual TArray<FText> GetBehaviorTexts() const;
 	const TSubclassOf<UScriptGraphNode>& GetCompatibleGraphType() const;
 	virtual void SetNodeTitle(const FText& NewTitle);

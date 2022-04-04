@@ -11,6 +11,9 @@ class FGGAssetEditorToolbar;
 /**
  * 
  */
+
+//#define ENABLE_AUTO_ARRANGE
+
 class SCRIPTDESIGNEREDITOR_API FAssetEditor_ScriptGraph
 	: public FAssetEditorToolkit, public FNotifyHook, public FGCObject 
 {

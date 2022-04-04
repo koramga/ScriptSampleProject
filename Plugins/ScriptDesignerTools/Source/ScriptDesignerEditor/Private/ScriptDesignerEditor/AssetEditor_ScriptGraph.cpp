@@ -5,8 +5,6 @@
 
 #include "GraphEditorActions.h"
 #include "ScriptGraphEditorPCH.h"
-#include "AutoLayout/ForceDirectedLayoutStrategy.h"
-#include "AutoLayout/TreeLayoutStrategy.h"
 #include "Framework/Commands/GenericCommands.h"
 #include "Kismet2/BlueprintEditorUtils.h"
 #include "HAL/PlatformApplicationMisc.h"
@@ -305,10 +303,14 @@ void FAssetEditor_ScriptGraph::BindCommands()
 		FCanExecuteAction::CreateSP(this, &FAssetEditor_ScriptGraph::CanGraphSettings)
 	);
 
+#ifdef ENABLE_AUTO_ARRANGE
+
 	ToolkitCommands->MapAction(FEditorCommands_ScriptGraph::Get().AutoArrange,
 		FExecuteAction::CreateSP(this, &FAssetEditor_ScriptGraph::AutoArrange),
 		FCanExecuteAction::CreateSP(this, &FAssetEditor_ScriptGraph::CanAutoArrange)
 	);
+
+#endif
 }
 
 void FAssetEditor_ScriptGraph::CreateEdGraph()
@@ -341,9 +343,13 @@ void FAssetEditor_ScriptGraph::CreateCommandList()
 			FExecuteAction::CreateRaw(this, &FAssetEditor_ScriptGraph::GraphSettings),
 			FCanExecuteAction::CreateRaw(this, &FAssetEditor_ScriptGraph::CanGraphSettings));
 
+#ifdef ENABLE_AUTO_ARRANGE
+	
 	GraphEditorCommands->MapAction(FEditorCommands_ScriptGraph::Get().AutoArrange,
 			FExecuteAction::CreateRaw(this, &FAssetEditor_ScriptGraph::AutoArrange),
 			FCanExecuteAction::CreateRaw(this, &FAssetEditor_ScriptGraph::CanAutoArrange));
+
+#endif
 
 	GraphEditorCommands->MapAction(FGenericCommands::Get().SelectAll,
 		FExecuteAction::CreateRaw(this, &FAssetEditor_ScriptGraph::SelectAllNodes),
@@ -694,36 +700,37 @@ bool FAssetEditor_ScriptGraph::CanGraphSettings() const
 
 void FAssetEditor_ScriptGraph::AutoArrange()
 {
-	UEdGraph_ScriptGraph* EdGraph = Cast<UEdGraph_ScriptGraph>(EditingGraph->EdGraph);
-	check(EdGraph != nullptr);
-
-	const FScopedTransaction Transaction(LOCTEXT("GenericGraphEditorAutoArrange", "Generic Graph Editor: Auto Arrange"));
-
-	EdGraph->Modify();
-
-	UAutoLayoutStrategy* LayoutStrategy = nullptr;
-	switch (ScriptGraphEditorSettings->AutoLayoutStrategy)
-	{
-	case EAutoLayoutStrategy::Tree:
-		LayoutStrategy = NewObject<UAutoLayoutStrategy>(EdGraph, UTreeLayoutStrategy::StaticClass());
-		break;
-	case EAutoLayoutStrategy::ForceDirected:
-		LayoutStrategy = NewObject<UAutoLayoutStrategy>(EdGraph, UForceDirectedLayoutStrategy::StaticClass());
-		break;
-	default:
-		break;
-	}
-
-	if (LayoutStrategy != nullptr)
-	{
-		LayoutStrategy->Settings = ScriptGraphEditorSettings;
-		LayoutStrategy->Layout(EdGraph);
-		LayoutStrategy->ConditionalBeginDestroy();
-	}
-	else
-	{
-		LOG_ERROR(TEXT("FAssetEditor_GenericGraph::AutoArrange LayoutStrategy is null."));
-	}
+	//UEdGraph_ScriptGraph* EdGraph = Cast<UEdGraph_ScriptGraph>(EditingGraph->EdGraph);
+	
+	//check(EdGraph != nullptr);
+	
+	//const FScopedTransaction Transaction(LOCTEXT("GenericGraphEditorAutoArrange", "Generic Graph Editor: Auto Arrange"));
+	
+	//EdGraph->Modify();
+	
+	//UAutoLayoutStrategy* LayoutStrategy = nullptr;
+	//switch (ScriptGraphEditorSettings->AutoLayoutStrategy)
+	//{
+	//case EAutoLayoutStrategy::Tree:
+	//	LayoutStrategy = NewObject<UAutoLayoutStrategy>(EdGraph, UTreeLayoutStrategy::StaticClass());
+	//	break;
+	//case EAutoLayoutStrategy::ForceDirected:
+	//	LayoutStrategy = NewObject<UAutoLayoutStrategy>(EdGraph, UForceDirectedLayoutStrategy::StaticClass());
+	//	break;
+	//default:
+	//	break;
+	//}
+//
+	//if (LayoutStrategy != nullptr)
+	//{
+	//	LayoutStrategy->Settings = ScriptGraphEditorSettings;
+	//	LayoutStrategy->Layout(EdGraph);
+	//	LayoutStrategy->ConditionalBeginDestroy();
+	//}
+	//else
+	//{
+	//	LOG_ERROR(TEXT("FAssetEditor_GenericGraph::AutoArrange LayoutStrategy is null."));
+	//}
 }
 
 bool FAssetEditor_ScriptGraph::CanAutoArrange() const
